@@ -136,58 +136,68 @@ trait_summary <- function(fieldbook, trait, genotype=NA, factor = NA, trait_dict
 #'   
 
 summary_by_design <-function(fieldbook, trait, genotype, factor,
-                             design = "Randomized Complete Block Design (RCBD)", trait_dict){
+                             design = "RCBD", trait_dict){
+                             #design = "Randomized Complete Block Design (RCBD)", trait_dict){
   
   fieldbook <- as.data.frame(fieldbook)
   
-  if(design == "Randomized Complete Block Design (RCBD)"){
+  #if(design == "Randomized Complete Block Design (RCBD)"){
+  if(design == "RCBD"){
     out <- trait_summary(fieldbook = fieldbook, trait = trait,
                          genotype= genotype, factor=NA, trait_dict = trait_dict, na.rm = TRUE)
   }
   
-  if (design == "Completely Randomized Design (CRD)"){
-    
+  #if (design == "Completely Randomized Design (CRD)"){
+  if (design == "CRD"){ 
     out <- trait_summary(fieldbook = fieldbook, trait = trait,
                          genotype= genotype, factor=NA, trait_dict = trait_dict, na.rm = TRUE)
   }
   
-  if (design == "Two-Way Factorial in CRD"){
+  #if (design == "Two-Way Factorial in CRD"){
+  if (design == "F2CRD"){
     out <- trait_summary(fieldbook = fieldbook, trait = trait,
                          genotype= genotype, factor=factor, trait_dict = trait_dict, na.rm = TRUE)
       }
   
-  if (design == "Two-Way Factorial in RCBD"){
+  #if (design == "Two-Way Factorial in RCBD"){
+  if (design == "F2RCBD"){  
     out <- trait_summary(fieldbook = fieldbook, trait = trait,
                          genotype= genotype, factor=factor, trait_dict = trait_dict, na.rm = TRUE)
     
   }
   
-  if (design == "Latin Square Design (LSD)"){
+  #if (design == "Latin Square Design (LSD)"){
+  if (design == "LSD"){
     out <- trait_summary(fieldbook = fieldbook, trait = trait,
                          genotype= genotype, factor=NA, trait_dict = trait_dict, na.rm = TRUE)
   }
   
-  if (design == "Augmented Block Design (ABD)"){
+  #if (design == "Augmented Block Design (ABD)"){
+  if (design == "ABD"){
     out <- trait_summary(fieldbook = fieldbook, trait = trait,
                          genotype= genotype, factor=NA, trait_dict = trait_dict, na.rm = TRUE)   
   }
   
-  if (design == "Split Plot with Plots in CRD (SPCRD)"){
+  #if (design == "Split Plot with Plots in CRD (SPCRD)"){
+  if (design == "SPCRD"){
     out <- trait_summary(fieldbook = fieldbook, trait = trait,
                          genotype= genotype, factor=factor, trait_dict = trait_dict, na.rm = TRUE)
   }
   
-  if (design == "Split Plot with Plots in RCBD (SPRCBD)"){
+  #if (design == "Split Plot with Plots in RCBD (SPRCBD)"){
+  if (design == "SPRCBD"){
     out <- trait_summary(fieldbook = fieldbook, trait = trait,
                          genotype= genotype, factor=factor, trait_dict = trait_dict, na.rm = TRUE)
   }
   
-  if (design == "Strip Plot Design (STRIP)"){
+  #if (design == "Strip Plot Design (STRIP)"){
+  if (design == "STRIP"){
     out <- trait_summary(fieldbook = fieldbook, trait = trait,
                          genotype= genotype, factor=factor, trait_dict = trait_dict, na.rm = TRUE)
   }
   
-  if (design == "Alpha(0,1) Design (A01D)"){
+  #if (design == "Alpha(0,1) Design (A01D)"){
+  if (design == "A01D"){
     out <- trait_summary(fieldbook = fieldbook, trait = trait,
                          genotype= genotype, factor=NA, trait_dict = trait_dict, na.rm = TRUE)            
   }

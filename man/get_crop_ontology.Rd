@@ -4,7 +4,7 @@
 \alias{get_crop_ontology}
 \title{Get the trait dictionary acordding to crop and trial.}
 \usage{
-get_crop_ontology(crop, trial)
+get_crop_ontology(crop, trial = NA)
 }
 \arguments{
 \item{crop}{The name of the crop}

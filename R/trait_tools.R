@@ -21,7 +21,8 @@ magrittr::`%>%`
 #' 
 get_trait_type <- function(trait,trait_dict)
 {
-  tp <- as.character(trait_dict[trait_dict$ABBR==trait,c("TYPE")]) 
+  tp <- as.character(trait_dict[trait_dict$ABBR==trait,c("TYPE")])
+  #tp <- na.exclude(tp)
   stringr::str_trim(tp,side="both")
   
   if(is.na(tp) || length(tp)==0){
@@ -50,8 +51,9 @@ get_trait_type <- function(trait,trait_dict)
 #' 
 get_trait_name <- function(trait,trait_dict)
 {
-  tp <- as.character(trait_dict[trait_dict$ABBR==trait,c("VAR")]) 
-  stringr::str_trim(tp,side="both")
+  tp <- as.character(trait_dict[trait_dict$ABBR==trait,c("VAR")])
+  tp <- na.exclude(tp)
+  stringr::str_trim(tp,side="both")[1]
   
   if(is.na(tp) || length(tp)==0){
     tp <- "It not Defined"
@@ -79,7 +81,8 @@ get_trait_name <- function(trait,trait_dict)
 #' 
 get_trait_units <- function(trait,trait_dict)
 {
-  tp <- as.character(trait_dict[trait_dict$ABBR==trait,c("UNITS")]) 
+  tp <- as.character(trait_dict[trait_dict$ABBR==trait,c("UNITS")])
+  #tp <- na.exclude(tp)
   stringr::str_trim(tp,side="both")
   
   if(is.na(tp) || length(tp)==0){
@@ -107,8 +110,11 @@ get_trait_units <- function(trait,trait_dict)
 #' 
 get_trait_crop <- function(trait,trait_dict)
 {
-  tp <- as.character(trait_dict[trait_dict$ABBR==trait,c("VAR")]) 
+  #print(trait)
+  tp <- as.character(trait_dict[trait_dict$ABBR==trait,c("VAR")])
+  #tp <- na.exclude(tp)
   stringr::str_trim(tp,side="both")
+  
   
   if(is.na(tp) || length(tp)==0){
     tp <- "none"
@@ -135,10 +141,11 @@ get_trait_crop <- function(trait,trait_dict)
 #' @export
 #' 
 get_scale_trait <- function(trait,trait_dict){
-  #print(trait)
+  print(trait)
   tp <- get_trait_type(trait = trait,trait_dict = trait_dict)
+  #tp <- na.exclude(tp)
   #print(tp)
-  if(tp=="Continuous"||tp=="Discrete"){
+  if(tp=="Continuous"||tp=="Discrete"||tp=="Numerical"){
     
     ll <- as.numeric(trait_dict[trait_dict$ABBR==trait,c("LOWER")])
     #In case trait is defined but dont have ll scale values will take 0
@@ -151,7 +158,7 @@ get_scale_trait <- function(trait,trait_dict){
     output <- list(ll=ll,ul=ul)
   }
   
-  if(tp=="Categorical"){
+  if(tp=="Categorical"||tp=="Nominal"||tp=="Ordinal"){
     cat_scale <- trait_dict[trait_dict$ABBR == trait, c("CLASS1","CLASS2","CLASS3","CLASS4","CLASS5","CLASS6","CLASS7","CLASS8","CLASS9","CLASS10")]
     pattern <- "= .*$"
     cat_scale <- gsub(pattern=pattern,replacement = "",x = cat_scale)
@@ -263,7 +270,7 @@ render_trait<- function(trait,trait_dict){
   tp <- get_trait_type(trait,trait_dict)  
   scale_trait_values <- get_scale_trait(trait = trait,trait_dict = trait_dict)
   
-  if(tp == "Continuous"|| tp == "Discrete"){
+  if(tp == "Continuous"|| tp == "Discrete"||tp=="Numerical"){
     
     ul <- scale_trait_values$ul  
     ll <- scale_trait_values$ll 
@@ -277,7 +284,7 @@ render_trait<- function(trait,trait_dict){
     
   }
   
-  if(tp =="Categorical"){
+  if(tp =="Categorical"||tp=="Nominal"||tp=="Ordinal"){
     
     categorical_scale <- scale_trait_values$cat_scale
     n <- length(categorical_scale)
@@ -317,7 +324,7 @@ render_trait_ext<- function(data,trait,trait_dict){
   tp <- get_trait_type(trait,trait_dict)  
   scale_trait_values <- get_scale_trait(trait = trait,trait_dict = trait_dict)
   
-  if(tp == "Continuous"|| tp == "Discrete"){
+  if(tp == "Continuous"|| tp == "Discrete"||tp=="Numerical"){
     
     ul <- scale_trait_values$ul  
     ll <- scale_trait_values$ll
@@ -330,7 +337,7 @@ render_trait_ext<- function(data,trait,trait_dict){
     
   }
   
-  if(tp =="Categorical"){
+  if(tp =="Categorical"||tp=="Nominal"||tp=="Ordinal"){
     
     categorical_scale <- scale_trait_values$cat_scale
     n <- length(categorical_scale)
@@ -351,9 +358,7 @@ render_trait_ext<- function(data,trait,trait_dict){
     
     render_trait <- render_quantitative_ext(ll,ul,ol,ou)
     out <- paste(render_trait)
-    
-    
-    
+  
   }      
   out
 }

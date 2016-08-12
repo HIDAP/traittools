@@ -15,6 +15,10 @@ col_render_trait <- function(fieldbook,trait,trait_dict){
   fieldbook$REP <- as.integer(fieldbook$REP)
   fieldbook$INSTN <- as.factor(fieldbook$INSTN)
   if("FACTOR" %in% names(fieldbook)) fieldbook$FACTOR<- as.factor(fieldbook$FACTOR)
+  if("PHASE" %in% names(fieldbook)) fieldbook$PHASE<- as.factor(fieldbook$PHASE)
+  if("IDENTIFIED_CRITERIA" %in% names(fieldbook)) fieldbook$IDENTIFIED_CRITERIA<- as.factor(fieldbook$IDENTIFIED_CRITERIA)
+  if("STYPE" %in% names(fieldbook)) fieldbook$STYPE<- as.factor(fieldbook$STYPE)
+  
   
   #Validator validates all the trait which produce render_values different from ("")
   #validator <- lapply(trait,function(x) v <- render_trait(trait = x,trait_dict = trait_dict))

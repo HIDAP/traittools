@@ -42,9 +42,18 @@ shinyServer(function(input, output, session) {
     if(length(hot_file)==0){return (NULL)}
     if(length(hot_file)>0){
       hot_param <- readxl::read_excel(path=hot_file , sheet = "Installation")
-      hot_design <- get_fb_param(hot_param,"Experimental design")
-      hot_plot_size <- get_fb_param(hot_param,"Plot size (m2)")
-      hot_plant_den <- get_fb_param(hot_param,"Planting density (plants/Ha)")
+      #hot_design <- get_fb_param(hot_param,"Experimental design")
+      hot_design <- get_fb_param(hot_param,"Experimental_design")
+      
+      #hot_design <- get_fb_param(hot_param,"Experimental design")
+      hot_design <- get_fb_param(hot_param,"Experimental_design")
+      
+      #hot_plot_size <- get_fb_param(hot_param,"Plot size (m2)")
+      hot_plot_size <- get_fb_param(hot_param,"Plot_size_(m2)")
+      
+      #hot_plant_den <- get_fb_param(hot_param,"Planting density (plants/Ha)")
+      hot_plant_den <- get_fb_param(hot_param,"Planting_density_(plants/Ha)")
+      
       hot_params_list <- list(hot_design = hot_design, hot_plot_size = hot_plot_size,
                               hot_plant_den =  hot_plant_den)
     }
@@ -55,7 +64,8 @@ shinyServer(function(input, output, session) {
     if(length(hot_file)==0){return (NULL)}
     if(length(hot_file)>0){
       hot_param <- readxl::read_excel(path=hot_file , sheet = "Minimal")
-      hot_crop <- get_fb_param(hot_param,"Crop")
+      hot_crop <- get_fb_param(hot_param,"Crop")# In DC and HiDAP 
+      
     }
   })
   
@@ -64,7 +74,8 @@ shinyServer(function(input, output, session) {
     if(length(hot_file)==0){return (NULL)}
     if(length(hot_file)>0){
       hot_param <- readxl::read_excel(path=hot_file , sheet = "Minimal")
-      hot_crop <- get_fb_param(hot_param,"Type of Trial")
+      #hot_trial <- get_fb_param(hot_param,"Type of Trial") in DataCollector
+      hot_trial <- get_fb_param(hot_param,"Type_of_Trial") #in HiDAP
     }
   })
   
@@ -74,8 +85,8 @@ shinyServer(function(input, output, session) {
     if(length(hot_file)==0){return (NULL)}
     if(length(hot_file)>0){
       #hot_mgt <- reactive_excel_metadata(file_id = hot_file , "Crop_management")
-      #hot_mgt <- openxlsx::read.xlsx(xlsxFile = hot_file, sheet = "Crop_management")
-      hot_mgt <- openxlsx::read.xlsx(xlsxFile= hot_file, sheet = "Crop_management", detectDates = TRUE)
+      #hot_mgt <- openxlsx::read.xlsx(xlsxFile = hot_file, sheet = "Crop_management") #in DataCollector
+      hot_mgt <- openxlsx::read.xlsx(xlsxFile= hot_file, sheet = "Crop_management", detectDates = TRUE) #in HiDAP
       hot_mgt
       #print(hot_mgt)
     }
@@ -86,7 +97,8 @@ shinyServer(function(input, output, session) {
     if(length(hot_file)==0){return (NULL)}
     if(length(hot_file)>0){
       #hot_mtl <- reactive_excel_metadata(file_id =hot_file , "Material List")
-      hot_mtl <- openxlsx::read.xlsx(xlsxFile= hot_file, sheet = "Material List", detectDates = TRUE)
+      #hot_mtl <- openxlsx::read.xlsx(xlsxFile= hot_file, sheet = "Material List", detectDates = TRUE)
+      hot_mtl <- openxlsx::read.xlsx(xlsxFile= hot_file, sheet = "Material_List", detectDates = TRUE) #
       hot_mtl
       #print(hot_mtl)
     }
@@ -153,7 +165,7 @@ shinyServer(function(input, output, session) {
     })
   
   
-  shiny::observeEvent(input$exportButton, function(){
+  shiny::observeEvent(input$exportButton, {
     
     withProgress(message = "Downloading Fieldbook and Applying Format...",value= 0,
                  {

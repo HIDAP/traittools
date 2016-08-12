@@ -14,7 +14,7 @@ calculate_trait_variables <- function(fb, plot_size=NA, plant_den=NA, mgt, mtl, 
   fieldbook_names <- names(fb)
   fieldbook<- sbcalculate(fb = fb,plot.size=plot_size,plant.den=plant_den)
   
-  if(trial_type=="late blight"){
+  if(trial_type =="late blight"){
     
     rel.days <- get.rel.days(mgt)
     lb.control <- get.lb.control(mtl)

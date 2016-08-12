@@ -32,7 +32,7 @@ mutate_excel_date <- function(date_value){
 #' 
 get_trait_fb <- function(fieldbook){
    
-   factors <-c("PLOT","INSTN","REP","FACTOR") 
+   factors <-c("PLOT","INSTN","REP","FACTOR", "ORDER","IDENTIFIED_CRITERIA", "PHASE", "STYPE") 
    trait_names <- names(fieldbook)
    trait_names <- names(fieldbook)[!is.element(names(fieldbook),factors)]
    trait_names 
@@ -114,19 +114,23 @@ get_sheet_data <- function(file,sheet){
 #' @param trial The name of the trial
 #' @export
 #' 
-get_crop_ontology <- function(crop,trial){
+get_crop_ontology <- function(crop,trial=NA){
   
+  trial <- tolower(trial)
   if(crop == "potato"){
-    if(trial=="yield") trait_dict <- potato_yield 
-    #if(trial=="Mother&Baby") trait_dict <- potato_motherbaby
-    if(trial=="late blight") trait_dict <- potato_lb
-    if(trial=="drought tolerance") trait_dict <- potato_drought
-    #if(trial=="dormancy") trait_dict <- potato_dormancy
-    if(trial=="bulking") trait_dict <- potato_bulking
+    #if(trial=="yield") trait_dict <- potato_yield 
+    ##if(trial=="Mother&Baby") trait_dict <- potato_motherbaby
+    #if(trial=="late blight") trait_dict <- potato_lb
+    ##if(trial=="drought tolerance") trait_dict <- potato_drought #In DataCollector
+    #if(trial=="drought") trait_dict <- potato_drought  #in HiDAp
+    ##if(trial=="dormancy") trait_dict <- potato_dormancy
+    #if(trial=="bulking") trait_dict <- potato_bulking
+    trait_dict <- td_potato
   }
   
   if(crop == "sweetpotato"){ 
-    if(trial=="yield") trait_dict <- sweetpotato_yield 
+    #if(trial=="yield") trait_dict <- sweetpotato_yield 
+    trait_dict <- td_sweetpotato
   }
   
   trait_dict
@@ -189,9 +193,12 @@ get.rel.days <- function(mgt){
 #' @param mtl The material list data
 #' @export
 get.lb.control <-function(mtl){
-  mtl$Scale.AUDPC.control = as.integer(mtl$Scale.AUDPC.control)
-  mtl$Institutional.number= as.character(mtl$Institutional.number)
-  mtl[!is.na(mtl$Scale.AUDPC.control),c("Institutional.number","Scale.AUDPC.control")]	
+  #mtl$Scale.AUDPC.control = as.integer(mtl$Scale.AUDPC.control) #in DataCollector
+  mtl$Scale_audpc = as.integer(mtl$Scale_audpc) #in HiDAP
+  #mtl$Institutional.number= as.character(mtl$Institutional.number) #in DataCollector
+  mtl$Institutional_number= as.character(mtl$Institutional_number) #in HiDAP
+  #mtl[!is.na(mtl$Scale.AUDPC.control),c("Institutional.number","Scale.AUDPC.control")]	#in DataCollector
+  mtl[!is.na(mtl$Scale_audpc),c("Institutional_number","Scale_audpc")] #in HiDAP
 }
 
 #' Scale for Area Under the Curve (Scale AUDPC)
@@ -204,7 +211,8 @@ get.lb.control <-function(mtl){
 
 saudpc <-function(instn, audpc, reps, lb.ctrl){
   audpc=as.numeric(as.character(audpc))
-  sc.ctrl = as.integer(lb.ctrl["Scale.AUDPC.control"])
+  #sc.ctrl = as.integer(lb.ctrl["Scale.AUDPC.control"]) #in DataCollector
+  sc.ctrl = as.integer(lb.ctrl["Scale_audpc"])
   saudpc = numeric(length(audpc))
   reps = as.integer(as.character(reps))
   rs=sort(unique(reps))
@@ -217,7 +225,8 @@ saudpc <-function(instn, audpc, reps, lb.ctrl){
     #print(a)
     n = instn[f]
     #print(n)
-    p = which(n==lb.ctrl["Institutional.number"][[1]])
+    #p = which(n==lb.ctrl["Institutional.number"][[1]]) #in DataCollector
+    p = which(n==lb.ctrl["Institutional_number"][[1]]) #in HiDAP
     if(length(p)==0){
       au.ctrl = ref.audpc
       #print(i)
